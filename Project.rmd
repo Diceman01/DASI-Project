@@ -1,0 +1,109 @@
+#Data Analysis and Statiscal Inference Course Project
+##Part 1: Introduction
+My question is this: Do a similar proportion of black Americans as white Americans feel that enough money is being spent on solving the problem of rising crime?
+
+##Part 2: Data
+The General Social Survey GSS has used a full probability sample (i.e. where all members of the population have a greater than zero chance of being selected, and this probability can be accurately determined) since 1977 ([GSS Codebook Appendix A](http://publicdata.norc.org:41000/gss/documents//BOOK/GSS_Codebook_AppendixA.pdf)).   The data is collected by trained interviewers conducting fieldwork ([GSS Codebook Appendix B](http://publicdata.norc.org/GSS/DOCUMENTS/BOOK/GSS_Codebook_AppendixB.pdf)).  
+
+The Primary Sampling Units (PSUs) employed are Standard Metropolitan Statistical Areas (SMSAs) or non-metropolitan counties selected in the National Opinion Research Center's (NORC) Master Sample. These SMSAs and counties were stratified by region, age, and race before selection.  
+
+I will be working with two variables for this project.   They are:  
+1. **NATCRIME** (Categorical)  
+2. **RACE** (Categorical)  
+
+In order to simplify my work, I subset the gss data into a smaller data frame, called focus.  
+```focus <- gss[,c("race","natcrime")]```  
+
+This is an observational study because I will be examining the relationship between two factors.   I will not be assigning subjects randomly into control or experimental groups, therefore this is NOT an experiment.  As causality cannot be established without random assignment, the conclusions of this study can only show evidence (or a lack thereof) of a relationship between the two stated variables.  As the GSS is a US-only survey, the population of interest are Americans.   Because the GSS uses a probability sampling method, it is generalizable to the general American population.
+
+##Part 3: Exploratory Data Analysis
+Before we perform a statistical analysis, we'd like to perform some exploratory data analysis to see if there appear to be patterns related to race.   To begin with, let's have a look at the summary counts of opinion on crime by race and then build a bar chart.
+```{r echo = FALSE}
+kable(with(focus,table(natcrime,race)))
+with(focus,barplot(table(natcrime,race)))
+```
+
+It looks like a larger percentage of whites and other races feel that the spending on crime is "About Right".   Let's look at how pervasive that opinion is within the whole of each respondent's race by using a mosaic plot.
+```{r echo = FALSE}
+with(focus,plot(natcrime~race))
+```
+
+The conclusion of the exploratory data analysis is that black respondents appear to be less likely to believe that the right amount of money is being spent on the issue of crime.   Let's perform an inferential analysis to see if this is statistically significant.
+
+##Part 4: Inference
+
+My hypothesis is that black Americans are less likely than white Americans to say that the amount of money being spent on the crime problem is "About Right".   Which means I will set my null hypothesis to be the claim that they are equal.   In other words, 
+
+$\begin{align}
+H_0: White_{AboutRight} & = Black_{AboutRight}\\
+H_A: White_{AboutRight} & \ne Black_{AboutRight}
+\end{align}$
+
+We need to calculate some sample statistics:  
+$\begin{align}
+\#\ of\ successes_1 & = White_{AboutRight}\\
+& = 7209\\
+\#\ of\ successes_2 & = Black_{AboutRight}\\
+& = 797\\
+n_1 & = White_{population}\\
+& = `r format(17412 + 7209 + 1562,scientific = FALSE)`\\
+n_2 & = Black_{population}\\
+& = `r format(3258+797+255,scientific = FALSE)`\\
+\hat{p}_{pool} & = \frac{\#\ of\ successes_1 + \#\ of\ success_2}{n_1+n_2}\\
+& = `r format(round((7209 + 797) / (26183 + 4310),4),digits = 4)`
+\end{align}$
+
+
+We check to see if the conditions are satisfied:
+
+1. **Independence**: Sampled observations must be independent 
+    a. within groups: random sample/assignment and if sampling without replacement, $n < 10\%$ of the population  
+    b. between groups: no reason to expect sampled whites and blacks to be dependent  
+2. **Sample Size/Skew**: $n_1p_{pool} \ge 10$, $n_1(1 - p_{pool}) \ge 10$, $n_2p_{pool} \ge 10$, $n_2(1 - p_{pool}) \ge 10$
+
+$\begin{align}
+n_1p_{pool} & = `r format(round(26183 * .2626,0),scientific = FALSE)` \\
+n_1(1 - p_{pool}) & = `r format(round(26183 * (1-0.2626),0),scientific = FALSE)`\\
+n_2p_{pool} & = `r format(round(4310 * .2626,0),scientific = FALSE)` \\
+n_2(1 - p_{pool}) & = `r format(round(4310 * (1-0.2626),0),scientific = FALSE)`
+\end{align}$
+
+Because our conditions are met, we know that the sampling distribution of the difference between the two proportions is nearly normal.   We must now calculate our standard error, generate a point estimate and state the null:  
+$\begin{align}
+SE & = \sqrt{\frac{p_{pool}(1 - p_{pool})}{n_1}+\frac{p_{pool}(1 - p_{pool})}{n_2}}\\
+& = `r format(round(sqrt((0.2626*(1-0.2626)/26183) + (0.2626*(1-0.2626)/4310)),5),digits = 5)`\\
+\hat{p}_{whites} & = White_{AboutRight} / White_{population}\\
+& = `r format(round(7209 / (17412 + 7209 + 1562),4),digits = 4, scientific = FALSE)`\\
+\hat{p}_{blacks} & = Black_{AboutRight} / Black_{population}\\
+& = `r format(round(797 / (3258 + 797 + 255),4),digits = 4, scientific = FALSE)`\\
+point\ estimate & = \hat{p}_{whites} - \hat{p}_{blacks}\\
+& = `r .2753-.1849`\\
+H_0 \Rightarrow null & = 0
+\end{align}$  
+We finally have all the parts needed to calculate our Z-statistic and measure the p-value.  
+$\begin{align}
+Z & = \frac{point\ estimate - null}{SE}\\
+& = `r format(round((0.0904 - 0)/0.00723,2),digits = 2)`\\
+\Rightarrow P(|Z| > 12) & \approx 0
+\end{align}$  
+
+In order to verify this result, we will calculate a confidence interval for the proportion of black Americans and check to see if the point estimate for white Americans falls in the confidence interval range.   Our conditions for calculating the confidence interval have already been met as described above.  
+
+$\begin{align}
+\hat{p}\pm z^*\cdot SE & = 0.1849 \pm 1.96\cdot 0.00723\\
+& = (`r format(round(0.1849 - (1.96 * 0.00723),4),digits=4)`, `r format(round(0.1849 + (1.96 * 0.00723),4),digits=4)`)
+\end{align}$  
+
+As can be seen, the results of the hypothesis test and the confidence interval test agree.
+
+##Part 5: Conclusion
+Because the p-value is equal to almost 0, we reject the null hypothesis and conclude that these data provide convincing evidence that a different proportion of black Americans from white Americans feel that the amount spent on the national issue of crime is about right.   Also, we are 95% confident that the true population proportion for black Americans who feel that the amount of money spent on crime is between 17.07% and 19.91%, which excludes the point estimate for the proportion of white Americans who feel that the amount of money spent on crime is about right.
+
+##References
+1. Smith, Tom W., Michael Hout, and Peter V. Marsden. General Social Survey, 1972-2012 [Cumulative File]. ICPSR34802-v1. Storrs, CT: Roper Center for Public Opinion Research, University of Connecticut /Ann Arbor, MI: Inter-university Consortium for Political and Social Research [distributors], 2013-09-11. d o i:10.3886/ICPSR34802.v1 [http://www.icpsr.umich.edu/icpsrweb/ICPSR/studies/34802/version/1]
+
+##Appendix
+```{r, results='asis'}
+snapshot <- focus[1600:1700,]
+kable(snapshot)
+```

@@ -1,0 +1,36 @@
+Part 1: Introduction (5 points)
+What is your research question? Why do you care? Why should others care?
+
+Part 2:  Data (10 points)
+Write about the data from your proposal in text (not bullet-point) form. Address these points:
+Data collection: Describe how the data were collected.
+Cases: What are the cases? (Remember: case = units of observation or units of experiment)
+Variables: What are the two variables you will be studying? State the type of each variable.
+Study: What is the type of study? Is it an observational study or an experiment? Explain how you've arrived at your conclusion using information on the sampling and/or experimental design.
+Scope of inference - generalizability: Identify the population of interest, and whether the findings from this analysis can be generalized to that population, or, if not, a subsection of that population. Explain why or why not. Also discuss any potential sources of bias that might prevent generalizability.
+Scope of inference - causality: Can these data be used to establish causal links between the variables of interest? Explain why or why not.
+
+Part 3: Exploratory data analysis (10 points)
+Calculate and discuss relevant descriptive statistics, including summary statistics and visualizations of the data. Also address what the exploratory data analysis suggests about your research question
+
+Part 4: Inference (20 points)
+State hypotheses
+Check conditions
+State the method(s) to be used and why and how
+Perform inference
+Interpret results
+If applicable, state whether results from various methods agree
+It is your responsibility to figure out the appropriate methodology. What techniques you use to conduct inference will depend on the type of data you're using, and your sample size. All of you should conduct at least a hypothesis test, and report the associated p-value and the conclusion. Those of you comparing two means, two medians, or two proportions should also calculate a confidence interval for the parameter of interest. Those of you working with categorical variables with more than two levels will need to use methods like ANOVA and chi-square testing for which there is no associated confidence interval, and that's ok. If your data fails some conditions and you can't use a theoretical method, then you should use an appropriate simulation based method. 
+If you can use both theoretical and simulation based methods, then choose one and stick with it. You don't have to do both. However if you can't use both, then you need to decide which is appropriate.
+If you can do both a hypothesis test and a confidence interval, do both, and comment on agreement of the results from the two methods. However if your variables do not lend themselves to a confidence interval, that's ok.
+It's essential to make sure the method you're using is appropriate for the dataset and the research question you're working with.
+
+Part 5: Conclusion (5 points)
+Write a brief summary of your findings without repeating your statements from earlier. Include a discussion of what you have learned about your research question and the data you collected, and include ideas for possible future research.
+
+References (1 point)
+Include a citation for your data, and if your data set is online, provide a link to the source. Also list other references (if any). 
+
+Appendix: (1 point)
+Take 1 page of your data set and attach it to your proposal. If your data fits in one page, great. If you have too many observations and it won’t fit, that’s ok too, just crop it at one page. However your print out should contain all relevant columns (this shouldn’t be an issue since you are working with one or two variables for your project).
+
